@@ -11,7 +11,7 @@
 int main(int argc, char const *argv[]) 
 { 
 	int sockfd = 0, valread;
-	struct sockaddr_in address
+	struct sockaddr_in address;
 	char *deal = "Deal"; 
     char buffer[1024] = {0}; 
 	//int inet_pton(int af, const char *src, void *dst);
@@ -39,7 +39,7 @@ int main(int argc, char const *argv[])
     } 
 	
 	send(sockfd, deal, strlen(deal), 0); 
-    printf("deal accepted \n"); 
+    printf("Deal\n"); 
     
 	valread = read( sockfd, buffer, 1024); 
     printf("%s\n",buffer );
