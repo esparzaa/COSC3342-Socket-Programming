@@ -68,46 +68,41 @@ int main(int argc, char const *argv[])
 		exit(1); 
 	}
 		
-	while(1)
-	{
-		new_sock = accept(sockfd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
-		if (new_sock<0)
-		{ 
-			printf("accept error\n"); 
-			exit(1); 
-		}
-		
-		int comparingString = strcmp(buffer, deal);
+	int comparingString = strcmp(buffer, deal);
 	
-		valread = read (new_sock, buffer, sizeof(buffer));
+	valread = read (new_sock, buffer, sizeof(buffer));
 		
-		if (comparingString == 0)
+	new_sock = accept(sockfd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
+	if (new_sock<0)
+	{ 
+		printf("accept error\n"); 
+		exit(1); 
+	}
+		
+	if (comparingString == 0)
+	{
+		sprintf(buffer, "Server deal initiated!\n");
+		send(new_sock, buffer, strlen(buffer), 0);
+		randperm(deckofcards, 52);
+		
+		for (int a=0; a<52; a++)
 		{
-			sprintf(buffer, "Server deal initiated!\n");
+			deckofcards[a]=a+1;
+		}
+		
+		for (int b=0; b<52; b++)
+		{
+			sprintf (buffer, "Card %d %d\r\n", b+1, deckofcards[b]);
 			send(new_sock, buffer, strlen(buffer), 0);
-			
-			for (int a=0; a<52; a++)
-			{
-				deckofcards[a]=a+1;
-			}
-			
-			randperm(deckofcards, 52);
-			
-			for (int b=0; b<52; b++)
-			{
-				sprintf (buffer, "Card %d %d\r\n", b+1, deckofcards[b]);
-				send(new_sock, buffer, strlen(buffer), 0);
-			}
 		}
+	}
 		
-		else 
-		{
-			sprintf(buffer, "Server error: Not responding\n");
-			printf("%s\n", buffer);
-			send(new_sock, deal, strlen(deal), 0);
-			printf("Deal sent\n");
-		}
-	break;
+	else 
+	{
+		sprintf(buffer, "Server error: Not responding\n");
+		printf("%s\n", buffer);
+		send(new_sock, deal, strlen(deal), 0);
+		printf("Deal sent\n");
 	}
 	
 	close(sockfd);
