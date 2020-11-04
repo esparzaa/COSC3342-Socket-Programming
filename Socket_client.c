@@ -5,7 +5,6 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
-#define PORT 5000
 
 
 //ssize_t send(int sockfd, const void *buf, size_t len, int flags);
@@ -21,7 +20,8 @@ int main(int argc, char const *argv[])
 	struct sockaddr_in address;
 	const char *deal = "Deal"; 
     char buffer[1024] = {0};
-	char serv_res[2000], mess[2000], output[1024];
+	char message[2000];
+	unsigned int PORT;
 	
 	//send(sockfd, deal, strlen(deal), 0); 
 	
@@ -30,6 +30,8 @@ int main(int argc, char const *argv[])
 		printf("Socket Creation Error\n");
 		return -1;
 	}
+	
+	PORT=atoi(argv[1]);
 	
 	address.sin_family = AF_INET; 
     address.sin_port = htons(PORT); 
@@ -49,6 +51,9 @@ int main(int argc, char const *argv[])
 	printf("Type 'Deal': \n\n"); 
 	
 	while(1){
+		
+		scanf("%s",message);
+		
 		srand(time(NULL));
 		int i, r;
 	
@@ -75,7 +80,6 @@ int main(int argc, char const *argv[])
 		}
     
 	valread = read( sockfd, buffer, 1024); 
-    printf("%s\n",buffer );
 	}
 	
     return 0; 
